@@ -5,10 +5,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.instagram.domain.follow.Follow;
+import com.cos.instagram.domain.follow.FollowRepository;
 import com.cos.instagram.domain.image.Image;
 import com.cos.instagram.domain.image.ImageRepository;
+import com.cos.instagram.domain.like.Likes;
+import com.cos.instagram.domain.like.LikesRepository;
 import com.cos.instagram.domain.tag.Tag;
 import com.cos.instagram.domain.tag.TagRepository;
 import com.cos.instagram.domain.user.User;
@@ -26,31 +33,32 @@ public class TestApiController {
 	
 	@Autowired
 	private TagRepository tagRepository;
-			
 	
-	@GetMapping("/test/api/join")
-	public User join() {
-		User user = User.builder()
-				.name("홍차")
-				.password("1234")
-				.phone("0102222")
-				.bio("안녕 난 홍차야")
-				.role(UserRole.USER)
-				.build();
-		
+	@Autowired
+	private FollowRepository followRepository;
+	
+	@Autowired
+	private LikesRepository likesRepository;
+	
+	
+	@PostMapping("/test/api/join")
+	public User join(@RequestBody User user) {
+		user.setRole(UserRole.USER); // USER
+
 		User userEntity = userRepository.save(user); // userEntity : 영속화된 user
 		return userEntity;
 	}
 	
-	@GetMapping("/test/api/image")
-	public String image() {
+	@PostMapping("/test/api/{caption}")
+	public String image(@PathVariable String caption) {
 		
 		User userEntity = userRepository.findById(1).get();
 
 		// 1. Image가 먼저 insert 되어야 Tag를 넣을 수 있음 
 		Image image = Image.builder()
-				.location("다낭")
-				.caption("설명")
+				.location("외국")
+				.caption(caption)
+				.imageUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNistxLCzQi8CK_iqM_C2TPbAaXFzJzDi1Eg13PkvzhZe7fLu0&s")
 				.user(userEntity) // 지금은 강제로, 넣을 때는 session (principal.id)
 				.build();
 		// -> 영속화가 아직 되지않은 Image 따라서 Tag 안의 image에는 값이 없는 상태!
@@ -60,7 +68,7 @@ public class TestApiController {
 		// 2. Tag insert
 		List<Tag> tags = new ArrayList<>();
 		Tag tag1 = Tag.builder()
-				.name("#다낭")
+				.name("#외국")
 				.image(imageEntity) // 위에 영속화된 imageEntity가 들어와서 매칭됨
 				.build();
 		Tag tag2 = Tag.builder()
@@ -92,4 +100,35 @@ public class TestApiController {
 	public List<Tag> tagList() {
 		return tagRepository.findAll();
 	}
+	
+	@PostMapping("/test/api/follow/{fromUserId}/{toUserId}")
+	public String follow(@PathVariable int fromUserId, @PathVariable int toUserId) {
+		User fromUserEntity = userRepository.findById(fromUserId).get();
+		User toUserEntity = userRepository.findById(toUserId).get();
+		
+		Follow follow = Follow.builder()
+				.fromUser(fromUserEntity)
+				.toUser(toUserEntity)
+				.build();
+		
+		followRepository.save(follow);
+		// http://localhost:8080/test/api/follow/1/2
+		
+		return fromUserEntity.getUsername() + "님이 " + toUserEntity.getUsername() + "을 팔로우 하였습니다.";
+	}
+	
+	@PostMapping("/test/api/image/{imageId}/likes")
+	public String imageLikes(@PathVariable int imageId) {
+		Image imageEntity = imageRepository.findById(imageId).get();
+		User userEntity = userRepository.findById(3).get();
+		Likes likes = Likes.builder()
+				.image(imageEntity)
+				.user(userEntity)
+				.build();
+		
+		likesRepository.save(likes);
+		return userEntity.getUsername() + "님이 " + imageEntity.getId() + "번 사진을 좋아합니다.";
+	}
+	
+	
 }
