@@ -33,7 +33,7 @@ public class IndexController {
 	
 	@GetMapping("/test/upload")
 	public String test6() {
-		return "image/image-upload"; // 오류
+		return "image/image-upload";
 	}
 	
 	@GetMapping("/test/proedit")
