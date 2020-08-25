@@ -49,7 +49,7 @@ public class TestApiController {
 		return userEntity;
 	}
 	
-	@PostMapping("/test/api/{caption}")
+	@PostMapping("/test/api/image/{caption}")
 	public String image(@PathVariable String caption) {
 		
 		User userEntity = userRepository.findById(1).get();

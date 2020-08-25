@@ -15,7 +15,7 @@ spring:
     password: bitc5600
     
   jpa:
-    open-in-view: false
+    open-in-view: true
     hibernate:
       ddl-auto: update
       naming:
