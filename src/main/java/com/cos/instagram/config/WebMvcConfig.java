@@ -49,7 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 			
 			@Override
 			public boolean supportsParameter(MethodParameter parameter) {
-				return true;
+				return false;
 			}
 			
 			@Override

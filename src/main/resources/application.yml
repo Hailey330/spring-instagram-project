@@ -13,6 +13,10 @@ spring:
     url: jdbc:mysql://localhost:3306/insta?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
     username: insta
     password: bitc5600
+
+  # 스프링에서 mustache 세션 적용하려면 필요함    
+  mustache:
+    expose-session-attributes: true 
     
   jpa:
     open-in-view: true
@@ -45,10 +49,10 @@ spring:
             scope:
             - email
             - public_profile
-     
+
       
 cos: # like 변수, 자바에서 찾기 쉽게 커스텀
   secret: 홍차
 
-file: # 파일 저장시 경로 
+file: # 파일 저장시 경로, 주소 끝에 꼭 / 붙어야함!
   path: C:/src/aouthwork/instagram/src/main/resources/upload/
