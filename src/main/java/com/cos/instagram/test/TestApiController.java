@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.instagram.config.auth.CosAnnotation;
+import com.cos.instagram.config.auth.LoginUserAnnotation;
+import com.cos.instagram.config.auth.dto.LoginUser;
 import com.cos.instagram.domain.follow.Follow;
 import com.cos.instagram.domain.follow.FollowRepository;
 import com.cos.instagram.domain.image.Image;
@@ -128,6 +131,12 @@ public class TestApiController {
 		
 		likesRepository.save(likes);
 		return userEntity.getUsername() + "님이 " + imageEntity.getId() + "번 사진을 좋아합니다.";
+	}
+	
+	@GetMapping("/test/annotation")
+	public String feed(@CosAnnotation String string) {
+		System.out.println("CosAnnotation : " + string);
+		return string;
 	}
 	
 	
