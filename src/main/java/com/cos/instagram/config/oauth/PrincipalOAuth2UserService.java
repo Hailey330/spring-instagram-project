@@ -67,6 +67,9 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 		String username = provider + "_" + providerId;
 		String password = bCryptPasswordEncoder.encode(cosSecret);
 		String email = oAuth2User.getAttribute("email");
+		// 추가 
+		String name = oAuth2User.getAttribute("name");
+		
 
 		User userEntity = userRepository.findByUsername(username).orElseGet(new Supplier<User>() {
 			// .get() 했을 때 못찾으면 exception 터지기 때문에 orElseGet() 사용
@@ -75,6 +78,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 				// 회원가입
 				User user = User.builder()
 						.username(username)
+						.name(name)
 						.password(password)
 						.email(email)
 						.role(UserRole.USER)
