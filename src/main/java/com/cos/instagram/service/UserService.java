@@ -3,17 +3,21 @@ package com.cos.instagram.service;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.instagram.config.auth.dto.LoginUser;
 import com.cos.instagram.config.handler.ex.MyUserIdNotFoundException;
-import com.cos.instagram.domain.image.Image;
-import com.cos.instagram.domain.image.ImageRepository;
+import com.cos.instagram.domain.follow.FollowRepository;
 import com.cos.instagram.domain.user.User;
 import com.cos.instagram.domain.user.UserRepository;
 import com.cos.instagram.web.dto.JoinReqDto;
+import com.cos.instagram.web.dto.UserProfileImageRespDto;
 import com.cos.instagram.web.dto.UserProfileRespDto;
 
 import lombok.RequiredArgsConstructor;
@@ -21,9 +25,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
+	
+	@PersistenceContext // DB Connection 할 수 있는 entity 객체를 넘겨줌
+	private EntityManager em; // Entity로 매핑해줌
 	private final UserRepository userRepository;
-	private final ImageRepository imageRepository;
+	private final FollowRepository followRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Transactional
@@ -42,6 +48,7 @@ public class UserService {
 		int imageCount;
 		int followerCount;
 		int followingCount;
+		boolean followState;
 		
 		// 1. User 찾기 
 		User userEntity = userRepository.findById(id)
@@ -51,23 +58,33 @@ public class UserService {
 						return new MyUserIdNotFoundException();
 					}					
 				});
-		// 2. 이미지 카운트
-		List<Image> imagesEntity = imageRepository.findByUserId(id); // 해당 페이지의 UserId
-		imageCount = imagesEntity.size();
+		
+		// 2. 이미지들과 전체 이미지 카운트(dto 받기)
+		StringBuilder sb = new StringBuilder();
+		sb.append("select im.id, im.imageUrl, ");
+		sb.append("(select count(*) from likes lk where lk.id = im.id) as likeCount, ");
+		sb.append("(select count(*) from comment ct where ct.id = im.id) as commentCount ");
+		sb.append("from image im where im.userId = ?"); // 값을 직접 넣으면 injection 공격 받음
+		String q = sb.toString();
+		Query query = em.createNativeQuery(q, "UserProfileImageRespDtoMapping").setParameter(1, id);
+		List<UserProfileImageRespDto> imagesEntity = query.getResultList();
+		//em.persist(imagesEntity); - 영속화 
 	
-		// 3. 팔로우 수 (수정해야함)
-		followerCount = 50;
-		followingCount = 100;
-	
-		// 4. 이미지들
+		
+		// 3. 팔로우 수
+		followerCount = followRepository.mCountByFollower(id); // 페이지의 주인 id
+		followingCount = followRepository.mCountByFollowing(id); // 페이지의 주인 id
+		
+		// 4. 팔로우 유무 체크
+		followState = followRepository.mFollowState(loginUser.getId(), id) == 1 ? true : false;
 		
 		// 5. 최종 마무리
 		UserProfileRespDto userProfileRespDto = 
 				UserProfileRespDto.builder()
 				.pageHost(id==loginUser.getId())
+				.followState(followState)
 				.user(userEntity)
-				.images(imagesEntity) // 수정 필요(댓글 수, 좋아요 수)
-				.imageCount(imageCount)
+				.images(imagesEntity)
 				.followerCount(followerCount)
 				.followingCount(followingCount)
 				.build();

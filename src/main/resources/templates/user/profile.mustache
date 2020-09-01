@@ -11,9 +11,16 @@
 			<div class="profile__title">
 				<h1>{{respDto.user.username}}</h1>
 					{{^respDto.pageHost}} <!-- pageHost가 False일 때 팔로우 보이게 함 -->
+					{{#respDto.followState}}
 					<a href="#">
-						<button class="profile_edit_btn">팔로우</button>
+						<button class="profile_edit_btn">팔로우 취소</button>
 					</a>
+					{{/respDto.followState}}
+					{{^respDto.followState}}
+					<a href="#">
+						<button class="profile_follow_btn">팔로우</button>
+					</a>
+					{{/respDto.followState}}
 					{{/respDto.pageHost}}
 					{{#respDto.pageHost}}
 					<a href="#">
@@ -58,10 +65,10 @@
 					</a>
 					<div class="profile__photo-overlay">
 						<span class="profile__photo-stat">
-							<i class="fa fa-heart"></i> 50
+							<i class="fa fa-heart"></i> {{likeCount}}
 						</span>
 						<span class="profile__photo-stat">
-							<i class="fa fa-comment"></i> 30
+							<i class="fa fa-comment"></i> {{commentCount}}
 						</span>
 						
 					</div>
