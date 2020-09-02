@@ -1,4 +1,4 @@
-package com.cos.instagram.config.auth;
+package com.cos.instagram.test;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

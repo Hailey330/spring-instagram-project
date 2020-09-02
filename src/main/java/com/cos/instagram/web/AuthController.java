@@ -2,25 +2,23 @@ package com.cos.instagram.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.cos.instagram.domain.user.User;
 import com.cos.instagram.service.UserService;
 import com.cos.instagram.web.dto.JoinReqDto;
-import com.cos.instagram.web.dto.LoginReqDto;
+
+import lombok.RequiredArgsConstructor;
 
 //인증 안된 유저들이 들어올 수 있는 페이지 : 회원가입, 로그인
+@RequiredArgsConstructor
 @Controller
 public class AuthController {
 
 	// log + ctrl + spaceBar
 	private static final Logger log = LoggerFactory.getLogger(AuthController.class);
-
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
 	@GetMapping("/auth/loginForm")
 	public String loginForm() {

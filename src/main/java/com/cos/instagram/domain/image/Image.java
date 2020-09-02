@@ -27,10 +27,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@SqlResultSetMapping(name = "UserProfileImageRespDtoMapping", classes = @ConstructorResult(targetClass = UserProfileImageRespDto.class, columns = {
-		@ColumnResult(name = "id", type = Integer.class), // Object 매핑 X
-		@ColumnResult(name = "imageUrl", type = String.class), @ColumnResult(name = "likeCount", type = Integer.class),
-		@ColumnResult(name = "commentCount", type = Integer.class) }))
+@SqlResultSetMapping(
+		name = "UserProfileImageRespDtoMapping", 
+		classes = @ConstructorResult(
+				targetClass = UserProfileImageRespDto.class, 
+				columns = {
+						@ColumnResult(name = "id", type = Integer.class), // Object 매핑 X
+						@ColumnResult(name = "imageUrl", type = String.class), 
+						@ColumnResult(name = "likeCount", type = Integer.class),
+						@ColumnResult(name = "commentCount", type = Integer.class) 
+						}
+				)
+		)
 
 @Entity
 @Data

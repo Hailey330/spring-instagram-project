@@ -1,4 +1,4 @@
-package com.cos.instagram.controller;
+package com.cos.instagram.test;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.instagram.config.auth.PrincipalDetails;
 
 @Controller
-public class IndexController {
+public class TestController {
 
 	@GetMapping("/test/facebook2")
 	public @ResponseBody String facebook2(@AuthenticationPrincipal UserDetails principal) {

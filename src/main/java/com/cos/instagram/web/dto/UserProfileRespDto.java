@@ -19,7 +19,7 @@ public class UserProfileRespDto {
 	private boolean followState; // 팔로우 유무 체크 : true(팔로우 취소), false(팔로우)
 	private User user;
 	private List<UserProfileImageRespDto> images;
-	private int imageCount;
 	private int followerCount;
 	private int followingCount;
+	private int imageCount;
 }

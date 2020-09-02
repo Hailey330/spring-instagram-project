@@ -29,7 +29,12 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 	private final TagRepository tagRepository;
 	private final UserRepository userRepository;
-	
+
+	@Transactional(readOnly = true)
+	public List<Image> 인기사진(int loginUserId) {
+		return imageRepository.mNonFollowImage(loginUserId);
+	}
+
 	@Value("${file.path}")
 	private String uploadFolder;
 
@@ -40,25 +45,23 @@ public class ImageService {
 		User userEntity = userRepository.findById(userId).orElseThrow(null);
 		UUID uuid = UUID.randomUUID();
 		String imageFilename = uuid + "_" + imageReqDto.getFile().getOriginalFilename();
-		Path imageFilePath = Paths.get(uploadFolder + imageFilename);
+		Path imageFilepath = Paths.get(uploadFolder + imageFilename);
 		try {
-			Files.write(imageFilePath, imageReqDto.getFile().getBytes());
+			Files.write(imageFilepath, imageReqDto.getFile().getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// 1. Image 저장
-		Image image = imageReqDto.toEntity(imageFilename, userEntity); // 경로 넣으면 나중에 바뀌었을 때 다 바꿔야함. 어차피 서버에서는 경로를 알기 때문에 파일명만 명시함
+		Image image = imageReqDto.toEntity(imageFilename, userEntity); // 경로 넣으면 나중에 바뀌었을 때 다 바꿔야함. 어차피 서버에서는 경로를 알기 때문에
+																		// 파일명만 명시함
 		Image imageEntity = imageRepository.save(image); // imageEntity - DB와 동기화된 데이터(영속화)
-		
+
 		// 2. Tag 저장
 		List<String> tagNames = Utils.tagParse(imageReqDto.getTags());
-	
+
 		for (String name : tagNames) {
-			Tag tag = Tag.builder()
-					.image(imageEntity)
-					.name(name)
-					.build();
+			Tag tag = Tag.builder().image(imageEntity).name(name).build();
 			tagRepository.save(tag);
 		}
 	}

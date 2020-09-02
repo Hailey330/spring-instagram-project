@@ -26,23 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	private final HttpSession httpSession;
-	
-	@Value("${file.path}")
-	private String uploadFolder;
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		WebMvcConfigurer.super.addResourceHandlers(registry);
-		
-		registry
-		.addResourceHandler("/upload/**")
-		.addResourceLocations("file:///" + uploadFolder)
-		.setCachePeriod(3600)
-		.resourceChain(true)
-		.addResolver(new PathResourceResolver());
-	}
-	
-	
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(new HandlerMethodArgumentResolver() {
@@ -62,23 +46,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				return httpSession.getAttribute("loginUser");
 			}
 		});
-
-		// TEST 
-		resolvers.add(new HandlerMethodArgumentResolver() {
-			
-			@Override
-			public boolean supportsParameter(MethodParameter parameter) {
-				return false;
-			}
-			
-			@Override
-			public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-					NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-				return "cos";
-			}
-		});
 	}
-	
-	
 
+	// 이미지 경로 찾기
+	@Value("${file.path}")
+	private String uploadFolder;
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		WebMvcConfigurer.super.addResourceHandlers(registry);
+
+		registry.addResourceHandler("/upload/**").addResourceLocations("file:///" + uploadFolder).setCachePeriod(3600)
+				.resourceChain(true).addResolver(new PathResourceResolver());
+	}
 }

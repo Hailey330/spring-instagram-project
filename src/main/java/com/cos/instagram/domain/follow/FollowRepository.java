@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface FollowRepository extends JpaRepository<Follow, Integer> {
+	
 	@Query(value = "SELECT count(*) FROM follow WHERE toUserId = ?1", nativeQuery = true)
 	int mCountByFollower(int toUserId);
 

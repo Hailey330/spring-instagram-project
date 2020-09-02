@@ -1,6 +1,7 @@
 package com.cos.instagram.web;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -14,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class ImageController {
-	
+
 	private final ImageService imageService;
-	
+
 	@GetMapping({ "", "/", "/image/feed" })
 	public String feed(@LoginUserAnnotation LoginUser loginUser) {
 		System.out.println("loginUser: " + loginUser);
@@ -29,14 +30,14 @@ public class ImageController {
 	}
 
 	@PostMapping("/image")
-	public String imageUpload(
-			@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
+	public String imageUpload(@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
 		imageService.사진업로드(imageReqDto, loginUser.getId());
 		return "redirect:/"; // 메인 페이지로 돌아감
 	}
-	
+
 	@GetMapping("/image/explore")
-	public String imageExplore() {
+	public String imageExplore(@LoginUserAnnotation LoginUser loginUser, Model model) {
+		model.addAttribute("images", imageService.인기사진(loginUser.getId()));
 		return "image/explore";
 	}
 }

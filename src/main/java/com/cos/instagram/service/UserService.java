@@ -64,7 +64,7 @@ public class UserService {
 		sb.append("select im.id, im.imageUrl, ");
 		sb.append("(select count(*) from likes lk where lk.imageId = im.id) as likeCount, ");
 		sb.append("(select count(*) from comment ct where ct.imageId = im.id) as commentCount ");
-		sb.append("from image im where im.userId = ?"); // 값을 직접 넣으면 injection 공격 받음
+		sb.append("from image im where im.userId = ? "); // 값을 직접 넣으면 injection 공격 받음
 		String q = sb.toString();
 		Query query = em.createNativeQuery(q, "UserProfileImageRespDtoMapping").setParameter(1, id);
 		List<UserProfileImageRespDto> imagesEntity = query.getResultList();
@@ -84,11 +84,11 @@ public class UserService {
 				UserProfileRespDto.builder()
 				.pageHost(id==loginUser.getId())
 				.followState(followState)
-				.user(userEntity)
-				.images(imagesEntity)
-				.imageCount(imageCount)
 				.followerCount(followerCount)
 				.followingCount(followingCount)
+				.imageCount(imageCount)
+				.user(userEntity)
+				.images(imagesEntity)
 				.build();
 	
 		return userProfileRespDto;
