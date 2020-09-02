@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -32,9 +33,11 @@ public class Comment {
 	private String content;
 
 	@ManyToOne // 이미지 하나에 댓글 여러개
+	@JoinColumn(name="imageId")
 	private Image image;
 
 	@ManyToOne // 유저 한 명은 댓글 여러개
+	@JoinColumn(name="userId")
 	private User user;
 
 	@CreationTimestamp

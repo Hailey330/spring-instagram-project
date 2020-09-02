@@ -34,4 +34,9 @@ public class ImageController {
 		imageService.사진업로드(imageReqDto, loginUser.getId());
 		return "redirect:/"; // 메인 페이지로 돌아감
 	}
+	
+	@GetMapping("/image/explore")
+	public String imageExplore() {
+		return "image/explore";
+	}
 }

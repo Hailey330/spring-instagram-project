@@ -37,8 +37,7 @@ public class ImageService {
 	public void 사진업로드(ImageReqDto imageReqDto, int userId) {
 
 		// 항상 DB와 동기화되는 것이 좋음
-		User userEntity = userRepository.findById(userId)
-				.orElseThrow(null);
+		User userEntity = userRepository.findById(userId).orElseThrow(null);
 		UUID uuid = UUID.randomUUID();
 		String imageFilename = uuid + "_" + imageReqDto.getFile().getOriginalFilename();
 		Path imageFilePath = Paths.get(uploadFolder + imageFilename);

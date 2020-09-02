@@ -62,14 +62,15 @@ public class UserService {
 		// 2. 이미지들과 전체 이미지 카운트(dto 받기)
 		StringBuilder sb = new StringBuilder();
 		sb.append("select im.id, im.imageUrl, ");
-		sb.append("(select count(*) from likes lk where lk.id = im.id) as likeCount, ");
-		sb.append("(select count(*) from comment ct where ct.id = im.id) as commentCount ");
+		sb.append("(select count(*) from likes lk where lk.imageId = im.id) as likeCount, ");
+		sb.append("(select count(*) from comment ct where ct.imageId = im.id) as commentCount ");
 		sb.append("from image im where im.userId = ?"); // 값을 직접 넣으면 injection 공격 받음
 		String q = sb.toString();
 		Query query = em.createNativeQuery(q, "UserProfileImageRespDtoMapping").setParameter(1, id);
 		List<UserProfileImageRespDto> imagesEntity = query.getResultList();
 		//em.persist(imagesEntity); - 영속화 
-	
+
+		imageCount = imagesEntity.size();
 		
 		// 3. 팔로우 수
 		followerCount = followRepository.mCountByFollower(id); // 페이지의 주인 id
@@ -85,6 +86,7 @@ public class UserService {
 				.followState(followState)
 				.user(userEntity)
 				.images(imagesEntity)
+				.imageCount(imageCount)
 				.followerCount(followerCount)
 				.followingCount(followingCount)
 				.build();

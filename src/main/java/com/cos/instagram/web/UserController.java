@@ -24,11 +24,10 @@ public class UserController {
 		model.addAttribute("respDto", userProfileRespDto);
 		return "user/profile";
 	}
-
-//	@GetMapping("/user/{id}")
-//	public @ResponseBody User profile(@PathVariable int id) {
-//		User userEntity = userService.회원프로필(id);
-//		return userEntity;
-//	}
 	
+	@GetMapping("/user/profileEdit")
+	public String profileEdit(@LoginUserAnnotation LoginUser loginUser) {
+		// 모델에 해당 user 정보 들고가야함
+		return "user/profile-edit";
+	}
 }
