@@ -10,6 +10,9 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
 	List<Image> findByUserId(int userId);
 	
 	// 내가 팔로우하지 않은 사람들의 이미지 뿌리기(최대 20개)
-	@Query(value = "select * from image where userId = any(select id from user where id != ?1 and id not in (select toUserId from follow where fromUserId = ?1)) limit 20", nativeQuery = true)
+	@Query(value = "select * from image where userId in (select id from user where id != ?1 and id not in (select toUserId from follow where fromUserId = ?1)) limit 20", nativeQuery = true)
 	List<Image> mNonFollowImage(int loginUserId);
+	
+	@Query(value = "select * from image where userId in (select toUserId from follow where fromUserId = ?1)", nativeQuery = true)
+	List<Image> mFeeds(int loginUserId);
 }

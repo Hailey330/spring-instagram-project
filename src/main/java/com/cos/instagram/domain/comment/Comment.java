@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.cos.instagram.domain.image.Image;
 import com.cos.instagram.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +37,8 @@ public class Comment {
 	@JoinColumn(name="imageId")
 	private Image image;
 
-	@ManyToOne // 유저 한 명은 댓글 여러개
+	// 댓글의 주인 user 
+	@ManyToOne // 유저 한 명은 댓글 여러개 - foreign key
 	@JoinColumn(name="userId")
 	private User user;
 

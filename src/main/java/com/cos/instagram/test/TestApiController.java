@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.instagram.config.auth.LoginUserAnnotation;
 import com.cos.instagram.config.auth.dto.LoginUser;
+import com.cos.instagram.domain.comment.Comment;
+import com.cos.instagram.domain.comment.CommentRepository;
 import com.cos.instagram.domain.follow.Follow;
 import com.cos.instagram.domain.follow.FollowRepository;
 import com.cos.instagram.domain.image.Image;
@@ -41,6 +43,9 @@ public class TestApiController {
 	
 	@Autowired
 	private LikesRepository likesRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	
 	@PostMapping("/test/api/join")

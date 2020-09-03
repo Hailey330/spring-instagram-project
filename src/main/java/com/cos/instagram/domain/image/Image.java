@@ -14,9 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.cos.instagram.domain.comment.Comment;
+import com.cos.instagram.domain.like.Likes;
 import com.cos.instagram.domain.tag.Tag;
 import com.cos.instagram.domain.user.User;
 import com.cos.instagram.web.dto.UserProfileImageRespDto;
@@ -63,8 +66,23 @@ public class Image {
 	@OneToMany(mappedBy = "image", fetch = FetchType.LAZY) // One : Image, Many : Tag
 	@JsonIgnoreProperties({ "image" }) // Jackson한테 내리는 명령 : 여기로부터 Tag 접근하면 Tag 안의 image는 getter 호출 하지마 → 무한 생성 막기
 	private List<Tag> tags;
+	
+	// Comment는 필요할 때 불러와야 하기 때문에 LAZY 로딩!
+	@JsonIgnoreProperties({ "image" })
+	@OneToMany(mappedBy = "image") // 이미지 1개에 여러 개의 댓글
+	private List<Comment> comments;
+	
+	@JsonIgnoreProperties({ "image" })
+	@OneToMany(mappedBy = "image")
+	private List<Likes> likes;
 
 	@CreationTimestamp
 	private Timestamp createDate; 
+	
+	@Transient
+	private boolean likeState;
+	
+	@Transient
+	private int likeCount;
 
 }
