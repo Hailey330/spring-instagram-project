@@ -93,5 +93,18 @@ public class UserService {
 	
 		return userProfileRespDto;
 	}
+	
+	@Transactional
+	public User 회원정보수정(int id) {
+		
+		// 1. 영속화하기 - user 찾기 
+		// 2. 업데이트 된 정보 변경하기 
+		// 3. Object 에 set값 담으면 자동으로 데이터 update 해줌
+		// ==> 더티체킹
+		
+		
+//		userRepository.mUpdateUserProfile(user, loginUserId)
+		return null;
+	}
 
 }
