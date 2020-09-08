@@ -94,17 +94,40 @@ public class UserService {
 		return userProfileRespDto;
 	}
 	
+	@Transactional(readOnly = true)
+	public User 회원정보(LoginUser loginUser) {
+		return userRepository.findById(loginUser.getId())
+				.orElseThrow(new Supplier<MyUserIdNotFoundException>() {
+
+					@Override
+					public MyUserIdNotFoundException get() {
+						return new MyUserIdNotFoundException();
+					}
+				});
+	}
+	
 	@Transactional
-	public User 회원정보수정(int id) {
-		
+	public void 회원정보수정(User user) {
 		// 1. 영속화하기 - user 찾기 
 		// 2. 업데이트 된 정보 변경하기 
 		// 3. Object 에 set값 담으면 자동으로 데이터 update 해줌
 		// ==> 더티체킹
 		
+		User userEntity = userRepository.findById(user.getId())
+				.orElseThrow(new Supplier<MyUserIdNotFoundException>() {
+
+					@Override
+					public MyUserIdNotFoundException get() {
+						return new MyUserIdNotFoundException();
+					}
+				});
 		
-//		userRepository.mUpdateUserProfile(user, loginUserId)
-		return null;
+		userEntity.setName(user.getName());
+		userEntity.setWebsite(user.getWebsite());
+		userEntity.setBio(user.getBio());
+		userEntity.setPhone(user.getPhone());
+		userEntity.setGender(user.getGender());
+		
 	}
 
 }

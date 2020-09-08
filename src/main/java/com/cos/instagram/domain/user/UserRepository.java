@@ -18,6 +18,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query(value = "select u.*,(select true from follow where fromUserId = ?2 and toUserId = u.id) as matpal from follow f inner join user u on f.fromUserId = u.id and f.toUserId = ?1", nativeQuery = true)
 	List<User> mFollowerUser(int pageUserId, int loginUserId);
 	
-	@Query(value = "update user set name = ?1, website = ?2, bio = ?3, phone = ?4 where id = ?5", nativeQuery = true)
-	User mUpdateUserProfile(User user, int loginUserId);
 }
