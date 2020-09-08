@@ -5,7 +5,8 @@
 			<li class="explore__user">
 				<div class="explore__content">
 					<a href="/user/{{id}}"></a>
-				<img src="/images/avatar.jpg" />
+				<img src="/upload/{{#profileImage}}{{profileImage}}{{/profileImage}}" id="profile_image" 
+			onerror="this.src='/images/avatar.jpg'"/>
 				<div class="explore__info">
 					<span class="explore__username">{{username}}</span> <span
 						class="explore__full-name">{{name}}</span>

@@ -1,15 +1,22 @@
 package com.cos.instagram.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.instagram.config.auth.dto.LoginUser;
 import com.cos.instagram.config.handler.ex.MyUserIdNotFoundException;
@@ -31,6 +38,32 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final FollowRepository followRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Value("${file.path}")
+	private String uploadFolder;
+	
+	@Transactional
+	public void 회원프로필사진업로드(LoginUser loginUser, MultipartFile file) {
+		UUID uuid = UUID.randomUUID();
+		String imageFilename = uuid + "_" + file.getOriginalFilename();
+		Path imageFilePath = Paths.get(uploadFolder + imageFilename);
+		try {
+			Files.write(imageFilePath, file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		User userEntity = userRepository.findById(loginUser.getId())
+				.orElseThrow(new Supplier<MyUserIdNotFoundException>() {
+
+					@Override
+					public MyUserIdNotFoundException get() {
+						return new MyUserIdNotFoundException();
+					}
+				});
+		
+		userEntity.setProfileImage(imageFilename);
+	}
 	
 	@Transactional
 	public void 회원가입(JoinReqDto joinReqDto) {

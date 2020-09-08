@@ -7,7 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.instagram.config.auth.LoginUserAnnotation;
 import com.cos.instagram.config.auth.dto.LoginUser;
@@ -46,5 +49,17 @@ public class UserController {
 		// 모델에 해당 user 정보 들고가야함
 		userService.회원정보수정(user);
 		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+	
+	// 원래는 Put으로 하는 것이 맞음
+	@PostMapping("/user/profileUpload")
+	public String profileImageUpdate(@RequestParam("profileImage") MultipartFile file,
+			int userId,
+			@LoginUserAnnotation LoginUser loginUser) {
+		if(userId == loginUser.getId()) {
+			userService.회원프로필사진업로드(loginUser, file);
+		}
+		
+		return "redirect:/user/" + userId;
 	}
 }
