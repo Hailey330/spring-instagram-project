@@ -33,22 +33,28 @@
 				{{/tags}}
 				</div>
 			<span class="photo__likes">{{likeCount}} likes</span>
+			<br/><br/>
 			<ul class="photo__comments">
 				{{#comments}}
 				<li class="photo_comment">
-					<span class="photo__comment-author">{{user.username}}</span>
-					{{content}}
+					<span class="photo__comment-author">{{user.username}}</span> 
+					<span style="font-size:12px;">{{content}}</span>
 				</li>
 				{{/comments}}
 			</ul>
 			<span class="photo__date">{{createDate}}</span>
 			<div class="photo__add-comment-container">
-				<textarea placeholder="Add a comment..."></textarea>
-				<i class="fa fa-ellipsis-h"></i>
+				<form id="frm-{{id}}" style="width:100%;">
+					<input type="hidden" name="userId" value="{{loginUser.id}}" />
+					<input type="hidden" name="imageId" value="{{id}}" />
+					<textarea id="content-{{id}}" name="content"  placeholder="Add a comment..."></textarea>
+				</form>	
+				<i onclick="commentSend({{id}})" class="fa fa-angle-down"></i>
 			</div>
 		</div>
 	</div>
 	{{/images}}	
 </main>
+<script src="/js/comment.js"></script>
 <script src="/js/like.js"></script>
 {{>layout/footer}}

@@ -52,4 +52,6 @@ cos: # like 변수, 자바에서 찾기 쉽게 커스텀
   secret: 홍차
 
 file: # 파일 저장시 경로, 주소 끝에 꼭 / 붙어야함!
-  path: C:/src/aouthwork/instagram/src/main/resources/upload/
+  path: /Users/minkyung/Documents/projectwork/spring-instagram-project/src/main/resources/upload/
+  # 윈도우 C:/src/aouthwork/instagram/src/main/resources/upload/
+
