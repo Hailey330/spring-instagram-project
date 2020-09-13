@@ -39,6 +39,9 @@
 				<li class="photo_comment">
 					<span class="photo__comment-author">{{user.username}}</span> 
 					<span style="font-size:12px;">{{content}}</span>
+					{{#commentHost}}
+						<i onclick="commentDelete({{id}})" class="fa fa-trash"></i>
+					{{/commentHost}}
 				</li>
 				{{/comments}}
 			</ul>
