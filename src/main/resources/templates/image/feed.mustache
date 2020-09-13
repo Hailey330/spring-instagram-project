@@ -3,7 +3,7 @@
 	{{#images}}
 	<div class="photo u-default-box">
 		<header class="photo__header">
-			<img src="/upload/{{#profileImage}}{{profileImage}}{{/profileImage}}" /> 
+			<img src="/upload/{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" /> 
 			<span class="photo__username">{{user.username}}</span>
 		</header>
 
@@ -26,14 +26,22 @@
 					<i class="fa fa-comment-o"></i>
 				</span>
 			</div>
+			
+			<span class="photo__likes">좋아요 {{likeCount}}개</span>
+			<br/><br/>			
+			
+			<div>
+			<span class="photo__username">{{user.username}}</span>
+				{{#caption}}{{caption}}{{/caption}}
+			</div>
+			<br/>
 			<!-- 이미지 태그 뿌리기 -->
 			<div class="photo_tag">
 				{{#tags}}
-					{{name}}
+					#{{name}}
 				{{/tags}}
-				</div>
-			<span class="photo__likes">{{likeCount}} likes</span>
-			<br/><br/>
+			</div>
+			
 			<ul class="photo__comments">
 				{{#comments}}
 				<li class="photo_comment">

@@ -5,7 +5,7 @@
 
 		<header class="edit-profile__header">
 			<div class="fucker-container">
-				<img src="/upload/{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}" />
+				<img src="/upload/{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" />	
 			</div>
 			<!-- master comments -->
 			<h1 class="edit-profile__username">{{user.username}}</h1>
@@ -27,12 +27,12 @@
 			
 			<div class="edit-profile__row">
 				<label class="edit-profile__label" for="website">Website</label> 
-				<input name="website" type="text" value="{{#user.website}}{{user.website}}{{/user.website}}">
+				<input name="website" type="text" value="{{#website}}{{website}}{{/website}}">
 			</div>
 			
 			<div class="edit-profile__row">
 				<label class="edit-profile__label" for="bio">Bio</label> 
-				<input name="bio" type="text" value="{{#user.bio}}{{user.bio}}{{/user.bio}}">
+				<input name="bio" type="text" value="{{#bio}}{{bio}}{{/bio}}">
 			</div>
 			
 			<div class="edit-profile__row">
@@ -42,12 +42,12 @@
 			
 			<div class="edit-profile__row">
 				<label class="edit-profile__label" for="phone-number">Phone Number</label> 
-					<input name="phone" type="text" value="{{#user.phone}}{{user.phone}}{{/user.phone}}">
+					<input name="phone" type="text" value="{{#phone}}{{phone}}{{/phone}}">
 			</div>
 			
 			<div class="edit-profile__row">
 				<label class="edit-profile__label" for="gender">Gender</label> 
-				<input name="gender" type="text" value="{{#user.gender}}{{user.gender}}{{/user.gender}}">
+				<input name="gender" type="text" value="{{#gender}}{{gender}}{{/gender}}">
 			</div>
 			
 			<div class="edit-profile__row">

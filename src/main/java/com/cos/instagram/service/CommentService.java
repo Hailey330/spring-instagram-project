@@ -1,10 +1,17 @@
 package com.cos.instagram.service;
 
+import java.util.function.Supplier;
+
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.cos.instagram.config.handler.ex.MyImageIdNotFoundException;
 import com.cos.instagram.domain.comment.CommentRepository;
+import com.cos.instagram.domain.image.Image;
+import com.cos.instagram.domain.image.ImageRepository;
+import com.cos.instagram.domain.noti.NotiRepository;
+import com.cos.instagram.domain.noti.NotiType;
 import com.cos.instagram.web.dto.CommentRespDto;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CommentService {
 	private final CommentRepository commentRepository;
+	private final NotiRepository notiRepository;
+	private final ImageRepository imageRepository;
 
 	@Transactional
 	public void 댓글쓰기(CommentRespDto commentRespDto) {
@@ -20,6 +29,14 @@ public class CommentService {
 				commentRespDto.getUserId(), 
 				commentRespDto.getImageId(), 
 				commentRespDto.getContent());
+		
+		Image imageEntity = imageRepository.findById(commentRespDto.getImageId()).orElseThrow(new Supplier<MyImageIdNotFoundException>() {
+			@Override
+			public MyImageIdNotFoundException get() {
+				return new MyImageIdNotFoundException();
+			}
+		});
+		notiRepository.mSave(commentRespDto.getUserId(), imageEntity.getUser().getId(), NotiType.COMMENT.name());
 	}
 	
 	@Transactional

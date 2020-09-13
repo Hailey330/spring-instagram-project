@@ -42,7 +42,7 @@ public class ImageController {
 	@PostMapping("/image")
 	public String imageUpload(@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
 		imageService.사진업로드(imageReqDto, loginUser.getId());
-		return "redirect:/"; // 메인 페이지로 돌아감
+		return "redirect:/user/"+loginUser.getId();
 	}
 
 	@GetMapping("/image/explore")
